@@ -135,7 +135,7 @@ const webhook = async (req, res) => {
             "data": {
                 "messaging_product": "whatsapp",
                 "to": WHATSAPP_TO,
-                "text": { body: botResponse?.answer }
+                "text": { body: botResponse?.answer ?botResponse?.answer:botResponse }
             },
             headers: {
                 "Authorization": `Bearer ${WHATSAPP_TOKEN}`,
