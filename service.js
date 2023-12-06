@@ -53,7 +53,7 @@ const webhook = async (req, res) => {
     console.log(incomingMsg);
     let userSelection = await req.session.userSelection || null;
     let msg = incomingMsg && incomingMsg[0] && incomingMsg[0].changes && incomingMsg[0].changes[0].value.messages && incomingMsg[0].changes[0].value.messages[0];
-    if (!userSelection && msg.type!=="interactive") {  
+    if ((!userSelection && msg.type!=="interactive")||msg.text.body==='End') {  
         let body = {
             "messaging_product": "whatsapp",
             "to": WHATSAPP_TO,
@@ -65,7 +65,7 @@ const webhook = async (req, res) => {
                     "text": "Welcome to DJP"
                 },
                 "body": {
-                    "text": "Please select the options below"
+                    "text": "Please select the options below. Reply with 'End' to start again"
                 },
                 "action": {
                     "buttons": [
@@ -87,6 +87,15 @@ const webhook = async (req, res) => {
                 }
             }
         }
+
+        req.session.destroy((err) => {
+            if (err) {
+              console.error('Error destroying session:', err);
+              res.sendStatus(500);
+            } else {
+              console.log('Session cleared successfully');
+            }
+          });
 
         axios.post(
             `https://graph.facebook.com/${WHATSAPP_VERSION}/${WHATSAPP_PHONEID}/messages`,
