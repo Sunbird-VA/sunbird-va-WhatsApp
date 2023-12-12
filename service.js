@@ -4,19 +4,20 @@ const axios = require("axios");
 const router = express.Router();
 const dot = require('dot-object');
 const session = require("express-session");
+const fs = require('fs');
+const botFile = fs.readFileSync('bots.json', 'utf-8');
+const footerFile = fs.readFileSync('footer.json', 'utf-8');
 
 
+// Read JSON file
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 const WHATSAPP_TO = process.env.WHATSAPP_TO;
 const WHATSAPP_VERSION = process.env.WHATSAPP_VERSION;
 const WHATSAPP_PHONEID = process.env.WHATSAPP_PHONEID;
 
-const bots = {
-    "1-js": "http://20.244.48.128:7081/generate_answers?uuid_number=418e9d56-88fa-11ee-9ef3-acde48001122&skip_cache=true&converse=true&query_string=",
-    "2-ks": "http://4.224.41.213:8000/query-with-langchain-gpt4?uuid_number=storybot&query_string=",
-    "3-ncf": "https://ncfsaarathi.sunbird.org/ncf-chat/answer?model=gpt-3.5&session_id=1701251559361&q="
-}
-const userSession = {};
+const bots = JSON.parse(botFile);
+const footer = JSON.parse(footerFile);
+
 
 const sendMessage = (req, res) => {
     console.log(req.body);
@@ -40,20 +41,12 @@ const sendMessage = (req, res) => {
         });
 }
 
-/**
- * display_phone_number => Unique for each user based on phone number 
- * Present in metadata & messages.context object 
- */
-function getSession(message) {
-
-}
-
 const webhook = async (req, res) => {
     let incomingMsg = req.body.entry || {};
     console.log(incomingMsg);
-    let userSelection = await req.session.userSelection || null;
+    let userSelection = await req?.session?.userSelection || null;
     let msg = incomingMsg && incomingMsg[0] && incomingMsg[0].changes && incomingMsg[0].changes[0].value.messages && incomingMsg[0].changes[0].value.messages[0];
-    if ((!userSelection && msg.type!=="interactive")||msg.text.body==='End') {  
+    if (((!userSelection && msg?.type !== 'interactive') || msg?.interactive?.button_reply.id === 'end')) {
         let body = {
             "messaging_product": "whatsapp",
             "to": WHATSAPP_TO,
@@ -62,10 +55,10 @@ const webhook = async (req, res) => {
                 "type": "button",
                 "header": {
                     "type": "text",
-                    "text": "Welcome to DJP"
+                    "text": "Welcome to Digital Jadui Pitara"
                 },
                 "body": {
-                    "text": "Please select the options below. Reply with 'End' to start again"
+                    "text": "Please select the options below"
                 },
                 "action": {
                     "buttons": [
@@ -73,29 +66,20 @@ const webhook = async (req, res) => {
                             "type": "reply",
                             "reply": {
                                 "id": "1-js",
-                                "title": "Jaadhu Sakhi"
+                                "title": "Interactive Bot"
                             }
                         },
                         {
                             "type": "reply",
                             "reply": {
                                 "id": "2-ks",
-                                "title": "Katha Sagara"
+                                "title": "Story Bot"
                             }
                         }
                     ]
                 }
             }
         }
-
-        req.session.destroy((err) => {
-            if (err) {
-              console.error('Error destroying session:', err);
-              res.sendStatus(500);
-            } else {
-              console.log('Session cleared successfully');
-            }
-          });
 
         axios.post(
             `https://graph.facebook.com/${WHATSAPP_VERSION}/${WHATSAPP_PHONEID}/messages`,
@@ -114,6 +98,15 @@ const webhook = async (req, res) => {
                     res.status(error.response.status).send(error.response.statusText);
                 }
             );
+
+        await req?.session?.destroy((err) => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                res.sendStatus(500);
+            } else {
+                console.log('Session cleared successfully');
+            }
+        })
     } else {
         console.log('USER Selection----', userSelection)
 
@@ -125,17 +118,44 @@ const webhook = async (req, res) => {
         } else {
             console.log('Existing userSelection:', userSelection);
         }
-        
 
+        let endMsg = "\n 0: Go to 'Main Menu' \n 1: 'Change Lang'";
         let botResponse = await getBotMessage(msg, userSelection);
-         console.log("webhook => botResponse", botResponse);
+        console.log("webhook => botResponse", botResponse?.answer.trim(100));
+        let ansStr = botResponse?.answer.substring(0, 2000) + endMsg;
+        console.log('-------', ansStr)
         axios({
             "method": "post",
             "url": `https://graph.facebook.com/${WHATSAPP_VERSION}/${WHATSAPP_PHONEID}/messages`,
             "data": {
                 "messaging_product": "whatsapp",
                 "to": WHATSAPP_TO,
-                "text": { body: botResponse?.answer ?botResponse?.answer:botResponse }
+
+                "text": {
+                    "body": ansStr,
+                },
+                "type": 'interactive', // Move 'type' to the 'text' property
+                "interactive": {
+                    "type": "button",
+                    "header": {
+                        "type": "text",
+                        "text": "DJP"
+                    },
+                    "body": {
+                        "text": `${ansStr}`
+                    },
+                    "action": {
+                        "buttons": [
+                            {
+                                "type": "reply",
+                                "reply": {
+                                    "id": "end",
+                                    "title": "Start Again"
+                                }
+                            }
+                        ]
+                    }
+                },
             },
             headers: {
                 "Authorization": `Bearer ${WHATSAPP_TOKEN}`,
@@ -149,27 +169,17 @@ const webhook = async (req, res) => {
                 },
                 (error) => {
                     console.log("webhook => error occured  with status code:", error.response.status);
+                    console.log("webhook => error:");
                     res.status(error.response.status).send(error.response.statusText);
                 }
             );
     }
 }
 
-
 const getBotMessage = async (msg, userSelection) => {
     if (msg) {
         let userQuery = msg.text && msg.text.body ? msg.text.body : "Hi";
-        let botUrl = bots[userSelection]
-        switch (userSelection) {
-            case "1-js": botUrl = botUrl + userQuery
-                break;
-            case "2-ks": botUrl = botUrl + userQuery;
-                break;
-            case "3-ncf": botUrl = botUrl + userQuery + "&sources=NCF_SE;NCF_FS;NEP"
-                break;
-            default:
-                break;
-        }
+        let botUrl = bots[userSelection] + userQuery
 
         console.log('botURL', botUrl)
         try {

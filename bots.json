@@ -1,0 +1,4 @@
+{
+    "1-js": "http://129.159.224.223:7081/query-using-voice?index_id=sakhi_discovery_all&input_language=English&output_format=Text&converse=false&query_text=",
+    "2-ks": "http://4.224.41.213:8000/query-with-langchain-gpt4?uuid_number=storybot&query_string="
+}
