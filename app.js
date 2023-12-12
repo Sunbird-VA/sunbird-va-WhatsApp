@@ -7,6 +7,8 @@ const express = require("express");
 const body_parser = require("body-parser");
 const session = require('./session');  // Import session module
 const service = require("./service")
+const netcore = require("./netcore")
+
 const app = express() // creates express http server
 
 app.use(body_parser.json());
@@ -18,6 +20,9 @@ app.listen(process.env.PORT || 1337, () => console.log("webhook is listening por
 app.post("/webhook", service.webhook)
 
 app.post("/sendMessage", service.sendMessage);
+
+app.post("/netcore/webhook", netcore.webhook);
+
 
 
 
