@@ -134,7 +134,7 @@ const webhook = async (req, res) => {
         let botResponse = await getBotMessage(msg, userSelection);
         console.log("webhook => botResponse", botResponse?.answer.trim(100));
         let ansStr = botResponse?.answer.substring(0, `${CHAR_LIMIT}`)
-        // console.log('-------', ansStr)
+        //console.log('-------', ansStr)
         axios({
             "method": "post",
             "url": `https://waapi.pepipost.com/api/v2/message/`,
@@ -177,7 +177,7 @@ const webhook = async (req, res) => {
                         "type_interactive": [
                             {
                                 "type": "button",
-                                "body": "uhui",
+                                "body": botResponse?.answer,
                                 "action": [
                                     {
                                         "buttons": [
