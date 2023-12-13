@@ -46,10 +46,27 @@ const webhook = async (req, res) => {
     let languageSelection = await req?.session?.languageSelection || null;
 
     let msg = incomingMsg && incomingMsg[0] && incomingMsg[0].changes && incomingMsg[0].changes[0].value.messages && incomingMsg[0].changes[0].value.messages[0];
-    if (((!userSelection && msg?.type !== 'interactive') || msg?.text?.body == '*')) {
+    if (((!languageSelection && !userSelection && msg?.type !== 'interactive') || msg?.text?.body == '#')) {
+        let body = botMessage.getBotMessage(null, "lang-selection");
+        body.to = WHATSAPP_TO;
+        sendMessage(req, res, body)
+    }  else if (((!userSelection && !languageSelection && msg?.type === 'interactive') || msg?.text?.body == '*')) {
         // New user or main menu
         let body = botMessage.getBotMessage(null, "bot-selection");
         body.to = WHATSAPP_TO;
+        if (!languageSelection) {
+            // If not present, set the default value from the incoming message
+            languageSelection = msg.interactive.button_reply.id;
+            req.session.languageSelection = languageSelection;
+            console.log('Value not present. Setting languageSelection:', languageSelection);
+        } else {
+            console.log('Existing languageSelection:', languageSelection);
+            if (languageSelection !== msg?.interactive?.button_reply?.id) {
+                req.session.languageSelection = msg?.interactive?.button_reply?.id;
+                console.log('Updated languageSelection:', msg?.interactive?.button_reply?.id);
+            }
+        }
+
         sendMessage(req, res, body)
     } else {
         // existing user & converstaion is happening
@@ -62,6 +79,10 @@ const webhook = async (req, res) => {
             console.log('Value not present. Setting userSelection:', userSelection);
         } else {
             console.log('Existing userSelection:', userSelection);
+            if (userSelection !== msg?.interactive?.button_reply?.id) {
+                req.session.userSelection = msg?.interactive?.button_reply?.id;
+                console.log('Updated userSelection:', msg.interactive?.button_reply?.id);
+            }
         }
 
         if (msg?.type === 'interactive') {
