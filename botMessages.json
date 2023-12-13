@@ -1,0 +1,56 @@
+{
+    "bot-1": {
+        "hi": "You can create your own story. What kind of story do you want? For example, I can tell a story about a boy who saw the sea for the first time, or a story about a girl riding a horse"
+    },
+    "bot-2": {
+        "hi": "What kind of activity do you want? For example, I can suggest you how to teach sorting to your children in a class"
+    },
+    "bot-3": {
+        "hi": "What kind of activity do you want? For example, I can suggest you how you can engage your child to learn about colors"
+    },
+    "bot-selection": {
+        "messaging_product": "whatsapp",
+        "type": "interactive",
+        "interactive": {
+            "type": "button",
+            "header": {
+                "type": "text",
+                "text": "Welcome to e-JaaduiPitara"
+            },
+            "body": {
+                "text": "I am here to help you with amazing stories and activities that you can engage your children with! \n\n What do you want? "
+            },
+            "action": {
+                "buttons": [
+                    {
+                        "type": "reply",
+                        "reply": {
+                            "id": "bot-1",
+                            "title": "A Story"
+                        }
+                    },
+                    {
+                        "type": "reply",
+                        "reply": {
+                            "id": "bot-2",
+                            "title": "Teacher Activities"
+                        }
+                    },
+                    {
+                        "type": "reply",
+                        "reply": {
+                            "id": "bot-3",
+                            "title": "Parent Activities"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "lang-selection": {
+
+    },
+    "footer-message": {
+
+    }
+}

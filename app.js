@@ -19,7 +19,7 @@ app.listen(process.env.PORT || 1337, () => console.log("webhook is listening por
 
 app.post("/webhook", service.webhook)
 
-app.post("/sendMessage", service.sendMessage);
+app.post("/testMessage", service.testMessage);
 
 app.post("/netcore/webhook", netcore.webhook);
 
