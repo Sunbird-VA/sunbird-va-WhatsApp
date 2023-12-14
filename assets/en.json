@@ -64,21 +64,21 @@
                     {
                         "type": "reply",
                         "reply": {
-                            "id": "lan_en",
+                            "id": "lang-1",
                             "title": "English"
                         }
                     },
                     {
                         "type": "reply",
                         "reply": {
-                            "id": "lan_hi",
+                            "id": "lang-2",
                             "title": "Hindi"
                         }
                     },
                     {
                         "type": "reply",
                         "reply": {
-                            "id": "lan_ka",
+                            "id": "lang-3",
                             "title": "Kannada"
                         }
                     }

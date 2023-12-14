@@ -1,14 +1,26 @@
 
+const fs = require('fs');
+const bots = JSON.parse(fs.readFileSync('assets/bots.json', 'utf-8'));
+const axios = require("axios");
+const botMessage=require('./botMessage')
+
 const setUserLaguage = (req, id, languageSelection) => {
     if (!languageSelection && id.includes('lan')) {
         // If not present, set the default value from the incoming message
         languageSelection = id;
         req.session.languageSelection = languageSelection;
+        langKey = languageSelection.split('_')[1]
+        console.log('key is', langKey)
+        botMessage.setBotMessage(botMessage.loadLanguageFile(langKey))
+
         console.log('Value not present. Setting languageSelection:', languageSelection);
     } else {
         console.log('Existing languageSelection:', languageSelection);
         if (id && languageSelection !== id && msg.interactive.button_reply.id.includes('lan')) {
             req.session.languageSelection = id;
+            langKey = id.split('_')[1]
+            console.log('key is',langKey)
+            botMessage.setBotMessage(botMessage.loadLanguageFile(langKey))
             console.log('Updated languageSelection:', id);
         }
     }
