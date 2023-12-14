@@ -50,18 +50,23 @@ const webhook = async (req, res) => {
         let body = botMessage.getBotMessage(null, "lang-selection");
         body.to = WHATSAPP_TO;
         sendMessage(req, res, body)
-    }  else if (((!userSelection && !languageSelection && msg?.type === 'interactive') || msg?.text?.body == '*')) {
+        req.session.languageSelection = null
+        req.session.userSelection = null
+
+    } else if (((!userSelection && !languageSelection && msg?.type === 'interactive') || msg?.text?.body == '*')) {
+        req.session.userSelection = null
+
         // New user or main menu
         let body = botMessage.getBotMessage(null, "bot-selection");
         body.to = WHATSAPP_TO;
-        if (!languageSelection) {
+        if (!languageSelection && msg.interactive.button_reply.id.includes('lan')) {
             // If not present, set the default value from the incoming message
             languageSelection = msg.interactive.button_reply.id;
             req.session.languageSelection = languageSelection;
             console.log('Value not present. Setting languageSelection:', languageSelection);
         } else {
             console.log('Existing languageSelection:', languageSelection);
-            if (languageSelection !== msg?.interactive?.button_reply?.id) {
+            if (msg?.interactive?.button_reply?.id && languageSelection !== msg?.interactive?.button_reply?.id && msg.interactive.button_reply.id.includes('lan')) {
                 req.session.languageSelection = msg?.interactive?.button_reply?.id;
                 console.log('Updated languageSelection:', msg?.interactive?.button_reply?.id);
             }
@@ -79,7 +84,7 @@ const webhook = async (req, res) => {
             console.log('Value not present. Setting userSelection:', userSelection);
         } else {
             console.log('Existing userSelection:', userSelection);
-            if (userSelection !== msg?.interactive?.button_reply?.id) {
+            if (msg?.interactive?.button_reply?.id && userSelection !== msg?.interactive?.button_reply?.id) {
                 req.session.userSelection = msg?.interactive?.button_reply?.id;
                 console.log('Updated userSelection:', msg.interactive?.button_reply?.id);
             }
