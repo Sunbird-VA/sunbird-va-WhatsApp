@@ -1,10 +1,9 @@
 const fs = require('fs');
-const botMessages = JSON.parse(fs.readFileSync('botMessages.json', 'utf-8'));
+const botMessages = JSON.parse(fs.readFileSync('assets/botMessages.json', 'utf-8'));
 
 
 const getBotMessage = (botId, key) => { 
     return botId ? botMessages[botId][key] : botMessages[key]
-    // return botMessages[botId][key];
 }
 
 const getBotWelcomeMessage = (botId) => {

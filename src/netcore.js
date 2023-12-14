@@ -2,9 +2,7 @@ const { app } = require("./app");
 const express = require("express");
 const axios = require("axios");
 const fs = require('fs');
-const botFile = fs.readFileSync('bots.json', 'utf-8');
-const footerFile = fs.readFileSync('footer.json', 'utf-8');
-
+const botFile = fs.readFileSync('assets/bots.json', 'utf-8');
 
 // Read JSON file
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
@@ -14,8 +12,6 @@ const WHATSAPP_PHONEID = process.env.WHATSAPP_PHONEID;
 const CHAR_LIMIT = process.env.CHAR_LIMIT;
 
 const bots = JSON.parse(botFile);
-const footer = JSON.parse(footerFile);
-
 
 const sendMessage = (req, res) => {
     console.log(req.body);

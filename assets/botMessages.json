@@ -15,7 +15,7 @@
             "type": "button",
             "header": {
                 "type": "text",
-                "text": "Welcome to e-JaaduiPitara"
+                "text": "e-JaaduiPitara"
             },
             "body": {
                 "text": "I am here to help you with amazing stories and activities that you can engage your children with! \n\n What do you want? "
@@ -54,10 +54,10 @@
             "type": "button",
             "header": {
                 "type": "text",
-                "text": "Welcome to e-JaaduiPitara"
+                "text": "Welcome to e-JaaduiPitaraa"
             },
             "body": {
-                "text": "Namaste 🙏 \n Select Language"
+                "text": "Namaste 🙏 \n\nSelect Language"
             },
             "action": {
                 "buttons": [
