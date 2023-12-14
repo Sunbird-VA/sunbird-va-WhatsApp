@@ -1,7 +1,5 @@
 const { app } = require("./app");
 const axios = require("axios");
-const fs = require('fs');
-const botFile = fs.readFileSync('assets/bots.json', 'utf-8');
 const botMessage = require("./botMessage");
 const util = require("./util");
 
@@ -11,7 +9,6 @@ const WHATSAPP_TO = process.env.WHATSAPP_TO;
 const WHATSAPP_VERSION = process.env.WHATSAPP_VERSION;
 const WHATSAPP_PHONEID = process.env.WHATSAPP_PHONEID;
 
-const bots = JSON.parse(botFile);
 
 const testMessage = (req, res) => {
     console.log(req.body);

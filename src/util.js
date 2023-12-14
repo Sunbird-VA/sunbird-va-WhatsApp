@@ -1,4 +1,8 @@
 
+const fs = require('fs');
+const bots = JSON.parse(fs.readFileSync('assets/bots.json', 'utf-8'));
+const axios = require("axios");
+
 const setUserLaguage = (req, id, languageSelection) => {
     if (!languageSelection && id.includes('lan')) {
         // If not present, set the default value from the incoming message
