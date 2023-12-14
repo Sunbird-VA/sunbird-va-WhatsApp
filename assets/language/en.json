@@ -1,14 +1,14 @@
 {
-    "bot-1": {
+    "bot_1": {
         "hi": "You can create your own story. What kind of story do you want? For example, I can tell a story about a boy who saw the sea for the first time, or a story about a girl riding a horse"
     },
-    "bot-2": {
+    "bot_2": {
         "hi": "What kind of activity do you want? For example, I can suggest you how to teach sorting to your children in a class"
     },
-    "bot-3": {
+    "bot_3": {
         "hi": "What kind of activity do you want? For example, I can suggest you how you can engage your child to learn about colors"
     },
-    "bot-selection": {
+    "bot_selection": {
         "messaging_product": "whatsapp",
         "type": "interactive",
         "interactive": {
@@ -25,21 +25,21 @@
                     {
                         "type": "reply",
                         "reply": {
-                            "id": "bot-1",
+                            "id": "bot_1",
                             "title": "A Story"
                         }
                     },
                     {
                         "type": "reply",
                         "reply": {
-                            "id": "bot-2",
+                            "id": "bot_2",
                             "title": "Teacher Activities"
                         }
                     },
                     {
                         "type": "reply",
                         "reply": {
-                            "id": "bot-3",
+                            "id": "bot_3",
                             "title": "Parent Activities"
                         }
                     }
@@ -47,7 +47,7 @@
             }
         }
     },
-    "lang-selection": {
+    "lang_selection": {
         "messaging_product": "whatsapp",
         "type": "interactive",
         "interactive": {
@@ -64,21 +64,21 @@
                     {
                         "type": "reply",
                         "reply": {
-                            "id": "lang-1",
+                            "id": "lan_en",
                             "title": "English"
                         }
                     },
                     {
                         "type": "reply",
                         "reply": {
-                            "id": "lang-2",
+                            "id": "lan_hi",
                             "title": "Hindi"
                         }
                     },
                     {
                         "type": "reply",
                         "reply": {
-                            "id": "lang-3",
+                            "id": "lan_ka",
                             "title": "Kannada"
                         }
                     }
@@ -86,5 +86,10 @@
             }
         }
     },
-    "footer-message": {}
+    "footer_message": {
+        "messaging_product": "whatsapp",
+        "text": {
+            "body": "\n \n Hope you liked it! \n -If you want to go to previous menu enter “*”. \n -If you want to go to main menu enter “#”"
+        }
+    }
 }

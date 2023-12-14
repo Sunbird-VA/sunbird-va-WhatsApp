@@ -1,5 +1,5 @@
 {
-    "bot-1": "http://4.224.41.213:8000/query-with-langchain-gpt4?uuid_number=storybot&query_string=",
-    "bot-2": "http://129.159.224.223:7081/query-using-voice?index_id=sakhi_discovery_all&input_language=English&output_format=Text&converse=false&query_text=",
-    "bot-3": "http://129.159.224.223:7081/query-using-voice?index_id=sakhi_discovery_all&input_language=English&output_format=Text&converse=false&query_text="
+    "bot_1": "http://4.224.41.213:8000/query-with-langchain-gpt4?uuid_number=storybot&query_string=",
+    "bot_2": "http://129.159.224.223:7081/query-using-voice?index_id=sakhi_discovery_all&input_language=English&output_format=Text&converse=false&query_text=",
+    "bot_3": "http://129.159.224.223:7081/query-using-voice?index_id=sakhi_discovery_all&input_language=English&output_format=Text&converse=false&query_text="
 }

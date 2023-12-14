@@ -8,11 +8,14 @@ const body_parser = require("body-parser");
 const session = require('./session');  // Import session module
 const service = require("./service")
 const netcore = require("./netcore")
+const language = require("./language")
 
 const app = express() // creates express http server
 
 app.use(body_parser.json());
 app.use(session);
+
+language.init();
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log("webhook is listening port:",process.env.PORT || 1337));

@@ -1,17 +1,16 @@
 const fs = require('fs');
-const botMessages = JSON.parse(fs.readFileSync('assets/botMessages.json', 'utf-8'));
+const {language_dict} = require("./language");
 
 
-const getBotMessage = (botId, key) => { 
-    return botId ? botMessages[botId][key] : botMessages[key]
+const getBotMessage = (language='en',botId, key) => { 
+    console.log('message',botId ?language_dict[language][botId][key] : language_dict[language][key])
+    console.log('bid',botId)
+    console.log('key',key)
+    return botId ? language_dict[language][botId][key] : language_dict[language][key]
 }
 
-const getBotWelcomeMessage = (botId) => {
-    return getBotMessage(botId, "hi");
+const getBotWelcomeMessage = (language='en',botId) => {
+    return getBotMessage(language,botId, "hi");
 }
 
-const getFooterMessage= () => {
-    return "\n \n Hope you liked it! \n -If you want to go to previous menu enter “*”. \n -If you want to go to main menu enter “#”";
-}
-
-module.exports = { getBotMessage, getBotWelcomeMessage,getFooterMessage }
+module.exports = { getBotMessage, getBotWelcomeMessage }
