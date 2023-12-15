@@ -43,43 +43,49 @@ const webhook = async (req, res) => {
         userSelection = util.setUserSelection(req, msg?.interactive?.button_reply?.id, userSelection)
         let langKey = languageSelection.split('_')[1]
 
-        if (msg?.type === 'interactive') {
-            console.log("Interactive")
-            let message = botMessage.getBotWelcomeMessage(langKey, userSelection)
+        if (userSelection) {
+            if (msg?.type === 'interactive') {
+                console.log("Interactive")
+                let message = botMessage.getBotWelcomeMessage(langKey, userSelection)
 
-            let body = {
-                "messaging_product": "whatsapp",
-                "to": WHATSAPP_TO,
-                "text": {
-                    "body": message,
+                let body = {
+                    "messaging_product": "whatsapp",
+                    "to": WHATSAPP_TO,
+                    "text": {
+                        "body": message,
+                    }
                 }
+                sendMessage(req, res, body);
+            } else {
+                console.log("Non-Interactive")
+
+                //Loading
+                let loadingBody = botMessage.getBotMessage(langKey, null, "loading_message");
+                loadingBody.to = WHATSAPP_TO;
+                await sendMessage(res, res, loadingBody);
+
+                //Bot response
+                let botResponse = await util.getBotMessage(msg, userSelection);
+                let ansStr = botResponse?.answer.substring(0, 800);
+
+                let body = {
+                    "messaging_product": "whatsapp",
+                    "to": WHATSAPP_TO,
+                    "text": {
+                        "body": ansStr,
+                    }
+                }
+                await sendMessage(req, res, body);
+
+                //Footer message
+                let footerBody = botMessage.getBotMessage(langKey, null, "footer_message");
+                footerBody.to = WHATSAPP_TO;
+                await sendMessage(req, res, footerBody);
             }
-            sendMessage(req, res, body);
         } else {
-            console.log("Non-Interactive")
-
-            //Loading
-            let loadingBody = botMessage.getBotMessage(langKey, null, "loading_message");
-            loadingBody.to = WHATSAPP_TO;
-            await sendMessage(res, res, loadingBody);
-
-            //Bot response
-            let botResponse = await util.getBotMessage(msg, userSelection);
-            let ansStr = botResponse?.answer.substring(0, 800);
-
-            let body = {
-                "messaging_product": "whatsapp",
-                "to": WHATSAPP_TO,
-                "text": {
-                    "body": ansStr,
-                }
-            }
-            await sendMessage(req, res, body);
-
-            //Footer message
-            let footerBody = botMessage.getBotMessage(langKey, null, "footer_message");
-            footerBody.to = WHATSAPP_TO;
-            await sendMessage(req, res, footerBody);
+            let body = botMessage.getBotMessage(langKey, null, "bot_selection");
+            body.to = WHATSAPP_TO;
+            sendMessage(req, res, body)
         }
     }
 }
